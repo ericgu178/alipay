@@ -1,11 +1,12 @@
 {
-    "name": "zkbr/alipay",
-    "description": "阿里云的小sdk",
+    "name": "ericgu178/alipay",
+    "description": "封装的阿里接口",
     "authors": [
         {
-            "name": "谷雪健",
-            "email": "15511604615@163.com"
+            "name": "EricGU178",
+            "email": "ericgu178@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {}
 }
