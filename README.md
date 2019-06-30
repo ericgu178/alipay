@@ -37,8 +37,8 @@ $config = [
 -----END RSA PRIVATE KEY-----', // 商户私钥
         "result_format" =>  "array", // 返回类型 
         "log_path"  =>  "/log", //日志目录
-        'return_url'    =>  'http://cj_member.xinliu.org/index/index/notify', // 跳转地址
-        'notify_url'    =>  'http://cj_member.xinliu.org/index/index/notify', // 异步回调地址
+        'return_url'    =>  '', // 跳转地址
+        'notify_url'    =>  '', // 异步回调地址
         'public_key'    => '' // 支付宝公钥
 ];
 $aop = Alipay::OpenPlatform($config);
