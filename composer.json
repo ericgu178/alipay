@@ -1,11 +1,11 @@
 {
     "name": "ericgu178/alipay",
-    "description": "---",
+    "description": "工作时封装的一部分阿里云的接口",
     "type": "library",
     "authors": [
         {
-            "name": "谷雪健",
-            "email": "15511604615@163.com"
+            "name": "EricGU178",
+            "email": "ericgu178@gmail.com"
         }
     ],
     "require": {
@@ -14,7 +14,6 @@
     "require-dev": {
         "php": ">=5.6.0"
     },
-    "license": "MIT",
     "autoload": {
         "psr-4": {
             "alipay\\": "src/"
