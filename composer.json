@@ -1,0 +1,11 @@
+{
+    "name": "ericgu178/alipay",
+    "type": "library",
+    "authors": [
+        {
+            "name": "谷雪健",
+            "email": "15511604615@163.com"
+        }
+    ],
+    "require": {}
+}
