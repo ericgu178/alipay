@@ -112,7 +112,7 @@ class Log
 
             // 构建写入字符串
             $str = '';
-            $str .= $ip . ' | <h2 style="' . $this->getStyle($level) . ';display:inline-block">' . $this->header . "</h2>";
+            $str .= $ip . ' | <h2 style="' . $this->getStyle($level) . ';display:inline-block">' . $this->header . "</h2> " . date('Y-m-d H:i:s');
             $str .= '<div>' . $content . "</div>\n";
             // 日志
             $fp = fopen($this->directory . '/' . $file . self::SUFFIX, "a") or die("Unable to open file!");

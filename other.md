@@ -1,3 +1,9 @@
+<!--
+ * @User: EricGU178
+ * @Date: 2019-08-09 14:58:47
+ * @LastEditors: EricGU178
+ * @LastEditTime: 2019-08-12 09:22:47
+ -->
 # 卡券模板
 
 创建 卡券 tpl_content 需要的内容
@@ -80,17 +86,50 @@ $coupon = [
                 'fileInfo'  =>  [
                     'canShare'      => false,
                     'formatVersion' =>  2,
-                    'serialNumber'  =>  '$serialNumber$'
+                    'serialNumber'  =>  869321396
                 ],
                 'merchant'  => [
                     'mname' => '四季风情',
                     'mtel'  => '26888888',
-                    'minfo' =>  'http://life.taobao.com/',
-                    'mcallbackUrl'  =>  'https://nhns.xinliu.org/gongju/index/callback'
+                    'minfo' =>  'http://life.taobao.com/'
                 ],
                 'platform'  => [
-                    'channelID' =>  app_id,
+                    'channelID' =>  config('alipay.alipay')['app_id'],
+                    'webServiceUrl' =>  'http://www.alipass.alipay.com/alipass/success.do'
                 ],
             ],
         ];
+```
+
+> 卡券实例发券
+
+```php
+"tpl_id": "2018071711565730423894319", 
+"tpl_params": {
+    "expireTime": "2019-04-30 23:59:59", 
+    "activeTime": "2017-04-01 00:00:00", 
+    "serialNumber": "abc_test_201807171156", 
+    "url":"http://xxxxx"
+}, 
+"recognition_type": "2", 
+"recognition_info": {
+   "user_id": "2088302449179665", 
+   "user_token": "d81ca68b6811678960f1c7bd44792b11"
+}
+
+解释
+
+tpl_id：指定券模板 id
+
+tpl_params：动态参数传值，模板中定义的占位动态参数，应全部通过此参数传入实际值
+
+key-value map 格式，key 和 value 都必须为 String 类型
+
+recognition_type：发券（用户信息识别）类型，“2”为基于用户信息识别 recognition_type 不同，recognition_info 的传参也不同
+
+recognition_info：发券用户信息模型，当recognition_type = "2"时，配置传参如下
+            user_id：指定本次发券的支付宝userId
+            user_token：本次发券该用户确认领取时生成并传回给商家的发券token令牌值
+
+注意：发券接口参数中传入的 user_token 与 tpl_id 及 user_id 都必须一一对应，否则会调用接口失败。
 ```

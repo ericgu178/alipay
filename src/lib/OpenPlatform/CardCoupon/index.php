@@ -25,11 +25,11 @@ class Index
      * @param string $tpl_content 模板内容信息，遵循JSON规范
      * @return void
      */
-    public function couponTemplateCreate(string $unique_id,string $tpl_content) 
+    public function couponTemplateCreate(string $unique_id,array $tpl_content) 
     {
         $data   =   [
             'unique_id'     =>  $unique_id,
-            'tpl_content'   =>  $tpl_content
+            'tpl_content'   =>  json_encode($tpl_content,256)
         ];
         $this->aop->method = 'alipay.pass.template.add';
         $this->aop->timestamp = date("Y-m-d H:i:s",time());
@@ -50,11 +50,11 @@ class Index
      * @param string $tpl_content 模板内容信息，遵循JSON规范
      * @return void
      */
-    public function couponTemplateUpdate(string $tpl_id,string $tpl_content) 
+    public function couponTemplateUpdate(string $tpl_id,array $tpl_content) 
     {
         $data   =   [
             'tpl_id'        =>  $tpl_id,
-            'tpl_content'   =>  $tpl_content
+            'tpl_content'   =>  json_encode($tpl_content,256)
         ];
         $this->aop->method = 'alipay.pass.template.update';
         $this->aop->timestamp = date("Y-m-d H:i:s",time());
@@ -106,23 +106,71 @@ class Index
      * 卡券模板生成后，如需将卡券发布给对应的用户，则调用此接口。
      * 
      * @param string tpl_id 卡券模板id
+     * @param string tpl_params 模版动态参数信息：对应模板中$变量名$的动态参数，见模板创建接口返回值中的tpl_params字段 json
      * @param string recognition_info 支付宝用户识别信息：uid发券组件,
-     * @param string recognition_type  Alipass添加对象识别类型：1–订单信息
+     * @param string recognition_type  Alipass添加对象识别类型：1–订单信息,2-为基于用户信息识别
      * @return void
      */
-    public function couponInstanceIssue(string $tpl_id , string $recognition_info , string $recognition_type = '1') 
+    public function couponInstanceIssue(string $tpl_id , array $tpl_params , array $recognition_info , string $recognition_type) 
     {
         $data   =   [
             'tpl_id'            =>  $tpl_id,
+            'tpl_params'        =>  json_encode($tpl_params,256),
             'recognition_type'  =>  $recognition_type,
-            'recognition_info'  =>  $recognition_info,
-            // 'tpl_params'        =>  $tpl_content
+            'recognition_info'  =>  json_encode($recognition_info,256),
         ];
         $this->aop->method = 'alipay.pass.instance.add';
         $this->aop->timestamp = date("Y-m-d H:i:s",time());
         $result = $this->aop->execute($data);
         return $result;
     }
+
+    /**
+     * 卡券实例更新接口
+     * 
+     * 对于已经发布的卡券，如需更新内容，可通过此接口更新，主要用于更新卡券的使用状态。
+     *
+     * @param string $serial_number 商户指定卡券唯一值
+     * @param string $channel_id 代理商代替商户发放卡券后，再代替商户更新卡券时，此值为商户的pid/appid
+     * @return void
+     */
+    public function couponInstanceUpdate(
+        string $serial_number,
+        string $channel_id,
+        string $status = '',
+        array  $tpl_params = [],
+        string $verify_code = '',
+        string $verify_type = ''
+    )
+    {
+        $data = [
+            'serial_number' =>  $serial_number,
+            'channel_id'    =>  $channel_id,
+        ];
+        
+        if (count($tpl_params) != 0) {
+            $data['tpl_params'] = json_encode($tpl_params,256);
+        }
+
+        if ($status === 'USED') {
+            if (empty($verify_code) || empty($verify_type)) {
+                \trigger_error('当状态变更为USED时,请传verify_code和verify_type');
+            }
+            $data['status'] = $status;
+            $data['verify_code'] = $verify_code;
+            $data['verify_type'] = $verify_type;
+        }
+
+        if ($status === 'CLOSED') {
+            $data['status'] = $status;
+        }
+
+        $this->aop->method = 'alipay.pass.instance.update';
+        $this->aop->timestamp = date("Y-m-d H:i:s",time());
+        $result = $this->aop->execute($data);
+        return $result;
+    }
+
 
     /**
      * 集点查询
