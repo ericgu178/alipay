@@ -1,8 +1,8 @@
 <!--
  * @User: EricGU178
  * @Date: 2019-08-09 14:58:47
- * @LastEditors: EricGU178
- * @LastEditTime: 2019-08-12 09:22:47
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2019-08-13 09:29:18
  -->
 # 卡券模板
 
@@ -86,16 +86,16 @@ $coupon = [
                 'fileInfo'  =>  [
                     'canShare'      => false,
                     'formatVersion' =>  2,
-                    'serialNumber'  =>  869321396
+                    'serialNumber'  =>  $serialNumber$
                 ],
                 'merchant'  => [
                     'mname' => '四季风情',
                     'mtel'  => '26888888',
                     'minfo' =>  'http://life.taobao.com/'
+                    'mcallbackUrl'  =>  'callback'
                 ],
                 'platform'  => [
-                    'channelID' =>  config('alipay.alipay')['app_id'],
-                    'webServiceUrl' =>  'http://www.alipass.alipay.com/alipass/success.do'
+                    'channelID' =>  appid,
                 ],
             ],
         ];
