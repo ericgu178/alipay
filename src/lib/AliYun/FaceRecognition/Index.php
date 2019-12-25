@@ -69,7 +69,7 @@ class Index
         foreach ($header as $k => $v) {
             $head[] = $k . ':' . $v;
         }
-        $response = Request::requestPost($url, $data, $head);
+        $response = Request::requestNormalPost($url, $data, $head);
         return $response;
     }
 
@@ -86,7 +86,7 @@ class Index
         foreach ($header as $k => $v) {
             $head[] = $k . ':' . $v;
         }
-        $response = Request::requestPost($url, $data, $head);
+        $response = Request::requestNormalPost($url, $data, $head);
         return $response;
     }
 
@@ -109,7 +109,7 @@ class Index
         foreach ($header as $k => $v) {
             $head[] = $k . ':' . $v;
         }
-        $response = Request::requestPost($url, $data, $head);
+        $response = tool::requestNormalPost($url, $data, $head);
         return $response;
     }
 
@@ -160,7 +160,7 @@ class Index
         $path          = $parse['path'];
         $stringToSign  = $http['method'] . "\n" . $header['accept'] . "\n" . $bodymd5 . "\n" . $header['content-type'] . "\n" . $header['date'] . "\n" . $path;
         $signature     = base64_encode(hash_hmac("sha1", $stringToSign, $this->accessKeySecret, true)); // 签名
-        $authorization = "Dataplus {$this->accessKeyId}:{$signature}";
+        $authorization = "Dataplus $this->accessKeyId:$signature";
 
         return $authorization;
     }
