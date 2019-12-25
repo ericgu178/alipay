@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "ericgu178/tool": "dev-master"
+        "ericgu178/tool": "^0.1"
     },
     "require-dev": {
         "php": ">=5.6.0"
