@@ -18,8 +18,6 @@ class Log
 
     // 日志后缀
     const SUFFIX = '.log';
-    // 网页后缀
-    const HTMLSUFFIX = '.html';
 
     // 日志级别，由轻微到严重分别是debug（调试）、info（信息）、notice（留意）、warning（警告）、error（错误）
     const DEBUG   = 'debug';
@@ -103,7 +101,7 @@ class Log
         }
         $ip      = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
         $content = $this->toString($content);
-
+        $date_time = date('Y-m-d H:i:s');
         // 开始写入
         try {
             if (is_dir($this->directory) === false) {
@@ -111,15 +109,10 @@ class Log
             }
 
             // 构建写入字符串
-            $str = '';
-            $str .= $ip . ' | <h2 style="' . $this->getStyle($level) . ';display:inline-block">' . $this->header . "</h2>";
-            $str .= '<div>' . $content . "</div>\n";
+            $str = '【记录时间】 ' . $date_time . ' 【IP】 ' . $ip . " —————————————————————————————————————— " . $this->header .  "\n";
+            $str .= $content . "\n<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n";
             // 日志
             $fp = fopen($this->directory . '/' . $file . self::SUFFIX, "a") or die("Unable to open file!");
-            fwrite($fp, $str);
-            fclose($fp);
-            // 网页
-            $fp = fopen($this->directory . '/' . $file . self::HTMLSUFFIX, "a") or die("Unable to open file!");
             fwrite($fp, $str);
             fclose($fp);
         } catch (\Exception $e) {
@@ -140,46 +133,10 @@ class Log
             $content = date('Y-m-d H:i:s') . ' - line ' . $content->getLine() . ' in ' . $content->getFile() . ':<span style="color:red;">' . $content->getMessage() . "</span><br>\n" . $content->getTraceAsString();
         }
 
-        if (is_array($content)) {
-            $head = '<tr><td style="text-align:center">列名</td><td>信息</td></tr>';
-            $body = '';
-            foreach ($content as $key => $value) {
-                if (is_array($value)) {
-                    $value = json_encode($value,JSON_UNESCAPED_UNICODE);
-                }
-                $body .= '<tr><td style="text-align:center">' . $key . '</td><td> ' . $value . '</td></tr>';
-            }
-            $content = sprintf(
-                '<table border=1>%s %s</table>',
-                $head,
-                $body
-            );
+        if (is_array($content) || \is_object($content)) {
+            $content = json_encode($content,256);
         }
 
         return $content;
-    }
-
-    // 获取样式
-    private function getStyle($level)
-    {
-        $style = null;
-        switch ($level) {
-            case self::DEBUG:
-                $style = 'color:blue';
-                break;
-            case self::INFO:
-                $style = 'color:green';
-                break;
-            case self::NOTICE:
-                $style = 'color:purple';
-                break;
-            case self::WARNING:
-                $style = 'color:orange';
-                break;
-            case self::ERROR:
-                $style = 'color:red';
-                break;
-        }
-        return $style;
     }
 }

@@ -166,14 +166,17 @@ class Aop extends Tool
         return $result;
     }
 
-    //生成签名
+    
+    /**
+     * 生成签名
+     *
+     * @param array $data
+     * @return string
+     * @author EricGU178
+     */
     private function setSign($data)
     {
-        // $private_key = file_get_contents($this->private_key);
-        // if(empty($private_key)){
-        //     trigger_error("商户私钥缺失");
-        // }
-        $private_key = $this->private_key;
+        $private_key = formatPrivateKey($this->private_key);
         $pri_key_id  = openssl_pkey_get_private($private_key);
         if (!$pri_key_id) {
             trigger_error("商户私钥缺失");
@@ -244,6 +247,13 @@ class Aop extends Tool
         $this->return_url = $url;
     }
 
+    /**
+     * 设置通知回调
+     *
+     * @param string $url
+     * @return void
+     * @author EricGU178
+     */
     public function setNotifyUrl($url)
     {
         $this->notify_url = $url;
@@ -320,3 +330,22 @@ function formatPubKey($pubKey) {
     $fKey .= "-----END PUBLIC KEY-----";
     return $fKey;
 }
+
+/**
+ * 私钥格式化 RSA2 格式
+ *
+ * @param string $privateKey
+ * @return void
+ * @author EricGU178
+ */
+function formatPrivateKey($privateKey) {
+    $fKey = "-----BEGIN RSA PRIVATE KEY-----\n";
+    $len = strlen($privateKey);
+    for($i = 0; $i < $len;) {
+        $fKey = $fKey . substr($privateKey, $i, 64) . "\n";
+        $i += 64;
+    }
+    $fKey .= "-----END RSA PRIVATE KEY-----";
+    return $fKey;
+}
+
